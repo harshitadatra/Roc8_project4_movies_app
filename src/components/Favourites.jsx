@@ -2,9 +2,10 @@ import React from 'react'
 
 export const Favourites = () => {
   return (
-    <div>
-      this is a favourite page 
-    </div>
+    <>
+       <div>Genres Container</div>
+       <div> </div>
+    </>
   )
 }
 

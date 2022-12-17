@@ -18,7 +18,7 @@ const App = () => {
             <>
               <Banner />
               <Movies />
-              <Pagination />
+             
             </>
           }
         />
