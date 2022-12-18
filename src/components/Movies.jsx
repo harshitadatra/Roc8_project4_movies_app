@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "../banner.jpg";
+import React, { useEffect } from "react";
+// import Image from "../banner.jpg";
 import axios from "axios";
 import { useState } from "react";
 import { Oval } from "react-loader-spinner";
@@ -9,6 +9,7 @@ export const Movies = () => {
 
   const [page,setPage] = useState(1);
   const [movies, setMovies] = useState([]);
+  
 
   function goAhead() 
   {
@@ -21,6 +22,7 @@ export const Movies = () => {
     setPage(page-1)
     }
   }
+  useEffect( function () {
   axios
     .get(
       `https://api.themoviedb.org/3/trending/movie/week?api_key=5540e483a20e0b20354dabc2d66a31c9&page=${page}`
@@ -28,11 +30,13 @@ export const Movies = () => {
     .then((res) => {
       console.table(res.data.results);
       setMovies(res.data.results);
-    },[page]);
+    }
+    )
+  },[page])
 
   return (
     <>
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <div className="mt-8 mb-8 font-bold text-2xl text-center">
           Trending movies
         </div>
@@ -49,16 +53,25 @@ export const Movies = () => {
         ) : (
           <div className="flex flex-wrap justify-center">
             {movies.map((movie) => (
-              <div
-                className={`bg-[url(https://image.tmdb.org/t/p/w500/${movie.backdrop_path})] h-[25vh] w-[150px] md:h-[30vh] md:w-[250px] bg-center bg-cover rounded-xl flex items-end m-4 hover:scale-110 ease-out duration 300`}
-              >
-                <div className="absolute top-2 right-2 p-2 bg-gray-800 rounded-xl">
-                  😍
+              <>
+                <div
+                  className={`bg-[url(https://image.tmdb.org/t/p/w500/${movie.backdrop_path})] h-[25vh] w-[150px] md:h-[30vh] md:w-[250px] bg-center bg-cover rounded-xl flex items-end m-4 relative`}
+                >
+                  <div
+                    className="absolute top-2 right-2
+                                    p-1
+                                    bg-gray-800
+                                    rounded-xl
+                                    text-xl
+                                    cursor-pointer"
+                  >
+                    😍
+                  </div>
+                  <div className="w-full font-bold text-white py-2 text-center rounded-b-xl bg-gray-900">
+                    {movie.title}
+                  </div>
                 </div>
-                <div className="w-full font-bold text-white py-2 text-center rounded-b-xl bg-gray-900">
-                  {movie.title}
-                </div>
-              </div>
+              </>
             ))}
           </div>
         )}
