@@ -48,7 +48,7 @@ export const Favourites = () => {
    console.log(temp);
    temp = new Set(temp);
    setGenres(["All Genres", ...temp]);
- }, [favourites]);
+ });
 
   let del = (movie) => {
     let newArray = favourites.filter((m) => m.id!== movie.id)
@@ -58,7 +58,7 @@ export const Favourites = () => {
   let filteredMovies = [];
 
   filteredMovies =
-    curGenre == "All Genres"
+    curGenre === "All Genres"
       ? favourites
       : favourites.filter((movie) => genreids[movie.genre_ids[0]] === curGenre);
   // sorting
