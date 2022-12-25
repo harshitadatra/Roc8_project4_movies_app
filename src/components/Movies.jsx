@@ -9,6 +9,8 @@ export const Movies = () => {
 
   const [page,setPage] = useState(1);
   const [movies, setMovies] = useState([]);
+  const [hover,setHover] = useState('');
+  const [favourites,setFavourites] = useState([])
   
 
   function goAhead() 
@@ -17,12 +19,30 @@ export const Movies = () => {
   }
   function goBehind()
   { 
-    if(page>1)
+    if(page > 1)
     {
     setPage(page-1)
     }
   }
+
+  let add = (movie) => 
+  {
+    let newArray = [...favourites,movie]
+    setFavourites([...newArray])
+    localStorage.setItem("imdb",JSON.stringify(newArray))
+  }
+  let del = (movie) => 
+  {
+    let newArray = favourites.filter((m) =>  m.id !== movie.id)
+    setFavourites([...newArray])
+    localStorage.setItem("imdb",JSON.stringify(newArray))
+  }
   useEffect( function () {
+    let oldFav = localStorage.getItem("imdb");
+    oldFav = JSON.parse(oldFav) || [];
+    console.log(oldFav);
+
+    //get data
   axios
     .get(
       `https://api.themoviedb.org/3/trending/movie/week?api_key=5540e483a20e0b20354dabc2d66a31c9&page=${page}`
@@ -55,18 +75,45 @@ export const Movies = () => {
             {movies.map((movie) => (
               <>
                 <div
-                  className={`bg-[url(https://image.tmdb.org/t/p/w500/${movie.backdrop_path})] h-[25vh] w-[150px] md:h-[30vh] md:w-[250px] bg-center bg-cover rounded-xl flex items-end m-4 relative`}
+                  className={`bg-[url(https://image.tmdb.org/t/p/w500/${movie.backdrop_path})] h-[25vh] w-[150px] md:h-[30vh] md:w-[250px] bg-center bg-cover rounded-xl flex items-end m-4 relative hover:scale-110 ease-out duration-300`}
+                  onMouseEnter={() => {
+                    setHover(movie.id);
+                  }}
+                  onMouseLeave={() => setHover("")}
                 >
-                  <div
-                    className="absolute top-2 right-2
+                  { 
+                     hover === movie.id && 
+                    <>
+                      {
+                      !favourites.find((m) => m.id === movie.id) ?
+                      <div
+                      onClick={ () => add(movie)}
+                        className="absolute top-2 right-2
                                     p-1
                                     bg-gray-800
                                     rounded-xl
                                     text-xl
                                     cursor-pointer"
-                  >
-                    😍
-                  </div>
+                      >
+                        😍
+                      </div>
+                      :
+                      <div
+                      onClick={() => del(movie)}
+                        className="absolute top-2 right-2
+                                    p-1
+                                    bg-gray-800
+                                    rounded-xl
+                                    text-xl
+                                    cursor-pointer"
+                      >
+                        ❌
+                        
+                      </div>
+                    }
+                    </>
+                  }
+
                   <div className="w-full font-bold text-white py-2 text-center rounded-b-xl bg-gray-900">
                     {movie.title}
                   </div>
