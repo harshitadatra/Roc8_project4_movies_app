@@ -60,7 +60,7 @@ Start the server
     - Filter by rating
     - Filter By popularity
     - Filter by Genres
-    - Filter by Brand
+    
     
 - Add to Favourites
 - Remove from favourites
