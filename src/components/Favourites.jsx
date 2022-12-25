@@ -1,9 +1,10 @@
 import React ,{useState} from 'react'
-import { useEffect } from 'react';
+import { useEffect,useMemo } from 'react';
 import { Pagination} from "./Pagination";
 
 export const Favourites = () => {
- let genreids = {
+  let genreids = useMemo(() => [], []);
+  genreids = {
    28: "Action",
    12: "Adventure",
    16: "Animation",
@@ -48,7 +49,7 @@ export const Favourites = () => {
    console.log(temp);
    temp = new Set(temp);
    setGenres(["All Genres", ...temp]);
- });
+ },[favourites,genreids]);
 
   let del = (movie) => {
     let newArray = favourites.filter((m) => m.id!== movie.id)
